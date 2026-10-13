@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.endevina.partit',
   appName: 'Endevina el partit',
-  webDir: 'public',
+  webDir: 'www',
   "server": {
     "url": "https://endevinaelpartit.netlify.app"
   }
