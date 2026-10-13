@@ -9,17 +9,26 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "canvas": "^3.2.3",
+    "cheerio": "^1.2.0",
+    "dotenv": "^18.0.7",
+    "hls.js": "^1.7.3",
+    "mongoose": "^9.11.1",
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
+    "@types/cheerio": "^0.22.35",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
+    "playwright": "^1.64.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
