@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.endevina.partit',
   appName: 'Endevina el partit',
-  webDir: '.next',
+  webDir: 'public',
   "server": {
     "url": process.env.WEB_URL,
     "cleartext": true
