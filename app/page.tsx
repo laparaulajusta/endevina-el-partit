@@ -146,8 +146,8 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-4 sm:p-8 bg-slate-950 text-slate-100">
-      <header className="w-full flex justify-between items-center gap-2 bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg">
+    <main className="flex flex-col min-h-screen p-4 sm:px-8 lg:px-12 xl:px-48 2xl:px-96 bg-slate-950 text-slate-100">
+      <header className="flex justify-between items-center gap-2 bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-lg">
         <div className="flex gap-3 items-center">
           <img src="/logo.png" className="h-16" />
           <div>
@@ -155,15 +155,15 @@ export default function Home() {
             <span className="text-xs text-slate-400">{data?.legislatura || 'Carregant legislatura...'}</span>
           </div>
         </div>
-        <div className="flex gap-3 text-sm font-bold">
+        <div className="flex flex-col sm:flex-row gap-3 text-sm font-bold">
           <span className="px-3 py-1 bg-green-950 text-green-400 border border-green-800 rounded-xl" title="Número d'encerts">✓ {score.hits}</span>
           <span className="px-3 py-1 bg-red-950 text-red-400 border border-red-800 rounded-xl" title="Número d'errades">✕ {score.misses}</span>
         </div>
       </header>
 
       {/* Reproductor Oficial del Canal Parlament */}
-      <div className="w-full my-6 flex flex-col items-center">
-        <div className="flex items-center justify-center relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black border border-slate-800">
+      <div className="w-full my-auto flex flex-col items-center">
+        <div className="flex items-center justify-center relative w-full max-h-[55vh] aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black border border-slate-800">
           {loading && !data ? (
             <div className="flex flex-col items-center gap-3 text-slate-400 text-sm">
               <div className="w-7 h-7 border-3 border-slate-700 border-t-amber-400 rounded-full animate-spin" />
@@ -229,7 +229,7 @@ export default function Home() {
         
         {/* Controls de reproducció */}
         {data && listening && ready && !result && !playerError && (
-          <div className="w-full mt-3 flex items-center justify-between gap-3">            
+          <div className="w-full mt-3 flex flex-col sm:flex-row items-center justify-between gap-3">            
             {/* Botons inferiors (Play/Pause, -5s, +5s) */}
             <div className="flex items-center justify-between gap-3 pt-1 border-t border-slate-800/60">
               <div className="flex items-center gap-2">
@@ -299,7 +299,7 @@ export default function Home() {
       </div>
 
       {result ? (
-        <div className={`w-full p-5 rounded-2xl text-center mb-4 border transition-all ${result.correct ? 'bg-green-950/80 border-green-600 text-green-200' : 'bg-red-950/80 border-red-600 text-red-200'}`}>
+        <div className={`p-5 rounded-2xl text-center mb-4 border transition-all ${result.correct ? 'bg-green-950/80 border-green-600 text-green-200' : 'bg-red-950/80 border-red-600 text-red-200'}`}>
           <p className="text-xl font-black mb-1">{result.correct ? '🎉 Has encertat!' : `❌ T'has equivocat!`}</p>
           <p className="text-sm text-slate-300">L'orador era <strong className="text-white underline">{result.orador}</strong> de <strong className="text-amber-300">{result.partitCorrecte} ({result.siglesCorrectes})</strong></p>
           {result.parlamentUrl && (
@@ -321,7 +321,7 @@ export default function Home() {
           </button>
         </div>
       ) : data ? (
-        <div className="w-full grid grid-cols-2 gap-3 mb-2">
+        <div className="grid grid-cols-2 gap-3 mb-2">
           {data.partits?.sort(function (a, b) {
             if (a.nom > b.nom) {
               return 1;
