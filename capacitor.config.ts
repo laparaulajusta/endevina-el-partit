@@ -5,8 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Endevina el partit',
   webDir: 'public',
   "server": {
-    "url": process.env.WEB_URL,
-    "cleartext": true
+    "url": "https://endevinaelpartit.netlify.app"
   }
 };
 
