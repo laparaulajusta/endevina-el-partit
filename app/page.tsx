@@ -135,6 +135,8 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ videoId: data.videoId, partitId })
       });
+      if (!res.ok)
+        throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       setResult(json);
 
@@ -145,6 +147,7 @@ export default function Home() {
       }
     } catch (err) {
       console.error('Error enviant la resposta:', err);
+      setSelectedId(null);
     }
   };
 
@@ -368,10 +371,13 @@ export default function Home() {
                 key={partit.id}
                 onClick={() => handleGuess(partit.id)}
                 disabled={selectedId !== null}
-                className={`p-3.5 bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 rounded-xl font-bold text-sm transition-all shadow-md flex flex-col items-center justify-center gap-0.5 ${isSelected ? 'border-amber-500 bg-slate-800' : ''}`}
+                className={`relative p-3.5 bg-slate-900 hover:bg-slate-800 active:scale-95 border border-slate-800 rounded-xl font-bold text-sm transition-all shadow-md flex flex-col items-center justify-center gap-0.5 ${isSelected ? 'border-amber-500 bg-slate-800' : ''}`}
               >
                 <span className="text-base text-amber-400">{partit.sigles}</span>
                 <span className="text-[11px] text-slate-400 font-normal truncate max-w-full">{partit.nom}</span>
+                {isSelected && (
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-slate-600 border-t-amber-400 rounded-full animate-spin" />
+                )}
               </button>
             );
           })}
