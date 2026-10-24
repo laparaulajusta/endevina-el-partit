@@ -34,14 +34,17 @@ export async function GET() {
     // 3. Enviar dades al frontend (sense revelar el partit ni l'orador!)
     const effectivePosicio = (video.posicio || 0) + VIDEO_BUFFER;
 
-    let manifestUrl = video.manifestUrl;
+let manifestUrl = video.manifestUrl;
     try {
-      manifestUrl = await resolveManifestUrl(video.idVideoFragment, video.posicio);
+      const resolvePromise = resolveManifestUrl(video.idVideoFragment, video.posicio);
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout Parlament')), 5000));
+      
+      manifestUrl = (await Promise.race([resolvePromise, timeoutPromise])) as string;
       await Video.updateOne({ _id: video._id }, { $set: { manifestUrl } });
     } catch (e) {
-      console.warn('Error resolent manifest en directe, fent servir fallback DB:', e);
-      if (!manifestUrl) 
-        throw e;
+      console.warn('El Parlament ha trigat massa o ha fallat, usant manifest de BD:', e);
+      if (!manifestUrl)
+        return NextResponse.json({ error: 'El servidor extern no respon' }, { status: 503 });      
     }
 
     return NextResponse.json({
