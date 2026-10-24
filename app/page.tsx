@@ -45,10 +45,27 @@ export default function Home() {
   const [canSetVolume, setCanSetVolume] = useState(true);
   const [muted, setMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [loadError, setLoadError] = useState(false);
   const playerRef = useRef<ClipPlayerHandle>(null);
   const getProgress = useCallback(() => playerRef.current?.getProgress() ?? 0, []);
-
+  
   const DURACIO = 30;
+
+  const fetchGame = async (): Promise<GameData> => {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 15000);
+    try {
+      const res = await fetch('/api/game/random', { signal: ctrl.signal });
+      if (!res.ok) 
+        throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      if (!json?.manifestUrl || json.posicio === undefined)
+        throw new Error('Resposta incompleta');
+      return json;
+    } finally {
+      clearTimeout(t);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -57,15 +74,17 @@ export default function Home() {
       setLoading(true);
       setResult(null);
       setSelectedId(null);
+      setLoadError(false);
       try {
-        const res = await fetch('/api/game/random');
-        const json = await res.json();
-        if (isMounted) 
+        const json = await fetchGame();
+        if (isMounted)
           setData(json);
       } catch (err) {
         console.error('Error carregant el joc:', err);
+        if (isMounted)
+          setLoadError(true);
       } finally {
-        if (isMounted) 
+        if (isMounted)
           setLoading(false);
       }
     };
@@ -94,12 +113,12 @@ export default function Home() {
     setPlayerError(false);
     setResult(null);
     setSelectedId(null);
+    setLoadError(false);
     try {
-      const res = await fetch('/api/game/random');
-      const json = await res.json();
-      setData(json);
+      setData(await fetchGame());
     } catch (err) {
       console.error(err);
+      setLoadError(true);
     } finally {
       setLoading(false);
     }
@@ -168,6 +187,18 @@ export default function Home() {
             <div className="flex flex-col items-center gap-3 text-slate-400 text-sm">
               <div className="w-7 h-7 border-3 border-slate-700 border-t-amber-400 rounded-full animate-spin" />
               <span>Carregant fragment del Parlament...</span>
+            </div>
+          ) : loadError ? (
+            <div className="flex flex-col items-center gap-3 p-4 text-center">
+              <p className="text-sm text-red-300">
+                No s'ha pogut carregar aquest fragment. Cal carregar-ne un altre.
+              </p>
+              <button
+                onClick={handleNext}
+                className="px-5 py-2 bg-amber-500 hover:bg-amber-400 active:scale-95 text-slate-950 font-extrabold rounded-xl"
+              >
+                Següent ➡️
+              </button>
             </div>
           ) : (listening || result) && !loading && data?.manifestUrl && data?.posicio !== undefined ? (
             <ClipPlayer
@@ -345,14 +376,14 @@ export default function Home() {
             );
           })}
         </div>
-      ) : (
+      ) : loading ? (
         <div className="w-full min-h-[240px] grid grid-cols-2 gap-3 mb-2 items-center justify-center bg-slate-900/40 border border-slate-900 rounded-2xl">
           <div className="col-span-2 flex flex-col items-center gap-2 text-slate-500 text-xs">
             <div className="w-5 h-5 border-2 border-slate-700 border-t-amber-400 rounded-full animate-spin" />
             <span>Carregant partits...</span>
           </div>
         </div>
-      )}
+      ) : null}
     </main>
   );
 }
