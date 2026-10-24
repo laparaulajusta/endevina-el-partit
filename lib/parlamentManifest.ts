@@ -2,12 +2,12 @@ const BASE = `${process.env.NEXT_PUBLIC_PARLAMENT_URL}ext/f?p=700:CLIP:0:::5:P5_
 
 const decode = (s: string) => s.replace(/&amp;/g, '&').replace(/\\u0026/gi, '&').replace(/\\u002f/gi, '/').replace(/\\\//g, '/');
 
-export async function resolveManifestUrl(idVideoFragment: string | number, posicio: string | number = 0): Promise<string> {
+export async function resolveManifestUrl(idVideoFragment: string | number, posicio: string | number = 0, timeoutMs = 10000): Promise<string> {
   const url = `${BASE}:${idVideoFragment},${posicio}`;
   const res = await fetch(url, {
     headers: { 'User-Agent': 'endevina-partit/1.0', 'Accept-Language': 'ca' },
     cache: 'no-store',
-    signal: AbortSignal.timeout(10000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
 
   if (!res.ok) 

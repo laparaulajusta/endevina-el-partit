@@ -171,7 +171,7 @@ export default function Home() {
           <img src="/logo.png" className="h-16" />
           <div>
             <h1 className="text-base font-black tracking-tight text-amber-400">Endevina el partit</h1>
-            <span className="text-xs text-slate-400">{data?.legislatura || 'Carregant legislatura...'}</span>
+            <span className="text-xs text-slate-400">{data?.legislatura || (loading ? 'Carregant legislatura...' : '')}</span>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 text-sm font-bold">
