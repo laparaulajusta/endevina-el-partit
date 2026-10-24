@@ -2,8 +2,6 @@
 import { NextResponse } from 'next/server';
 import { clipPageUrl } from '@/lib/parlamentManifest';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET(req: Request) {
   const id = new URL(req.url).searchParams.get('id') ?? '';
   const t0 = Date.now();
