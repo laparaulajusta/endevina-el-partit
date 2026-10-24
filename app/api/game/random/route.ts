@@ -4,8 +4,6 @@ import { Video } from '@/models/Video';
 import { Partit } from '@/models/Partit';
 import { resolveManifestUrl, VIDEO_BUFFER } from '@/lib/parlamentManifest';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET() {
   try {
     await connectDB();
