@@ -4,6 +4,8 @@ import { Video } from '@/models/Video';
 import { Partit } from '@/models/Partit';
 import { resolveManifestUrl, VIDEO_BUFFER } from '@/lib/parlamentManifest';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     await connectDB();
@@ -35,9 +37,13 @@ export async function GET() {
     const effectivePosicio = (video.posicio || 0) + VIDEO_BUFFER;
 
     let manifestUrl = video.manifestUrl;
-    if (!manifestUrl) {
+    try {
       manifestUrl = await resolveManifestUrl(video.idVideoFragment, video.posicio);
       await Video.updateOne({ _id: video._id }, { $set: { manifestUrl } });
+    } catch (e) {
+      console.warn('Error resolent manifest en directe, fent servir fallback DB:', e);
+      if (!manifestUrl) 
+        throw e;
     }
 
     return NextResponse.json({
